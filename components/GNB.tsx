@@ -203,16 +203,56 @@ export default function GNB({
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 font-pretendard ${
-        isScrolled
-          ? "bg-hanji-bg/95 backdrop-blur-md border-b border-ink-black/10 py-3 shadow-xs"
-          : "bg-transparent py-4 sm:py-5"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* 좌측 배지 공간 확보용 Spacer (좌측 오각형 배지가 위치함) */}
-        <div className="w-14 sm:w-20 md:w-32 flex-shrink-0" />
+    <>
+      {/* 
+        [1. 독립 펜던트 엠블럼 - fixed 헤더 바깥(형제 요소)으로 완전 분리]
+        - fixed 헤더와 분리되어 스크롤을 내리면 페이지와 함께 자연스럽게 위로 올라가 사라짐
+        - absolute top-0 left-4 sm:left-6 md:left-10 z-50
+        - 최상단(scrollY=0)에서는 천장에 매달린 형태를 온전히 연출
+      */}
+      <div className="absolute top-0 left-0 right-0 w-full z-50 pointer-events-none">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <Link
+            href="/"
+            title="1446 세종런 메인으로 이동"
+            className="absolute top-0 left-4 sm:left-6 md:left-10 z-50 group block select-none pointer-events-auto"
+          >
+            <div className="relative w-16 sm:w-20 md:w-28 transition-transform duration-300 group-hover:scale-105 origin-top">
+              <Image
+                src="/images/badge-sejong-gold.png"
+                alt="이응다리 세종 엠블럼"
+                width={895}
+                height={1024}
+                priority
+                className="w-full h-auto object-contain mix-blend-multiply select-none block"
+                style={{
+                  filter:
+                    "drop-shadow(0 4px 10px rgba(4, 21, 31, 0.12)) drop-shadow(0 2px 4px rgba(205, 163, 87, 0.2))",
+                }}
+              />
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      {/* 
+        [2. 상단 고정 네비게이션 바 (fixed)]
+        - fixed top-0 left-0 right-0 w-full z-40
+        - 스크롤을 내려도 항상 화면 상단에 고정
+        - 본문 글자가 헤더 뒤로 깔끔하게 가려지도록 bg-hanji-bg/95 backdrop-blur-md 유지
+      */}
+      <header
+        className={`fixed top-0 left-0 right-0 w-full z-40 transition-all duration-300 font-pretendard ${
+          isScrolled
+            ? "bg-hanji-bg/95 backdrop-blur-md border-b border-ink-black/10 shadow-xs"
+            : "bg-transparent"
+        }`}
+      >
+        <div
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative flex items-center justify-between h-16 sm:h-20"
+        >
+          {/* 좌측: 엠블럼과 부딪히지 않도록 충분한 간격 확보용 스페이서 (w-20 sm:w-24 md:w-36) */}
+          <div className="w-20 sm:w-24 md:w-36 flex-shrink-0" aria-hidden="true" />
 
         {/* 
           [한글런 벤치마킹 데스크톱 GNB 드롭다운 네비게이션]
@@ -232,16 +272,26 @@ export default function GNB({
                 {/* 대분류 버튼 */}
                 <button
                   type="button"
-                  className={`text-sm lg:text-base font-pretendard tracking-tight flex items-center space-x-1.5 transition-colors duration-200 py-1 ${
+                  className={`text-sm lg:text-base font-pretendard tracking-tight flex items-center space-x-1.5 transition-all duration-200 py-1.5 relative group ${
                     isHovered
                       ? "text-burnt-orange font-bold"
                       : "text-ink-black/85 hover:text-ink-black font-semibold"
                   }`}
                 >
-                  <span>{category.title}</span>
+                  <span className="relative pb-0.5">
+                    {category.title}
+                    {/* 금색(Gold #CDA357) 밑줄 인디케이터 (Hover 시 활성화) */}
+                    <span
+                      className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full transition-all duration-200 ${
+                        isHovered
+                          ? "bg-sejong-gold opacity-100 scale-x-100"
+                          : "bg-sejong-gold/40 opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"
+                      }`}
+                    />
+                  </span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      isHovered ? "rotate-180 text-burnt-orange" : "text-ink-black/40"
+                      isHovered ? "rotate-180 text-sejong-gold" : "text-ink-black/40 group-hover:text-sejong-gold"
                     }`}
                   />
                 </button>
@@ -265,7 +315,7 @@ export default function GNB({
                             key={sub.name}
                             type="button"
                             onClick={() => executeItemAction(sub)}
-                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-burnt-orange/10 hover:text-burnt-orange text-ink-black/85 transition-all text-xs lg:text-sm font-medium flex items-center justify-between group"
+                            className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-sejong-gold/10 hover:text-burnt-orange text-ink-black/85 transition-all text-xs lg:text-sm font-medium flex items-center justify-between group"
                           >
                             <span className="font-semibold group-hover:translate-x-0.5 transition-transform">
                               {sub.name}
@@ -275,7 +325,7 @@ export default function GNB({
                                 {sub.badge}
                               </span>
                             ) : (
-                              <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all text-burnt-orange" />
+                              <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all text-sejong-gold" />
                             )}
                           </button>
                         ))}
@@ -314,25 +364,14 @@ export default function GNB({
           </button>
         </div>
 
-        {/* 모바일 상단 바 로고 & 햄버거 토글 */}
-        <div className="flex md:hidden items-center space-x-2">
-          <Link href="/" className="w-20 sm:w-24 flex-shrink-0 block">
-            <Image
-              src="/images/logo-1446.svg"
-              alt="1446 세종런 로고"
-              width={100}
-              height={44}
-              priority
-              className="w-full h-auto drop-shadow-sm"
-            />
-          </Link>
-
+        {/* 모바일 상단 바: 햄버거 토글 버튼(☰)만 심플하게 배치 */}
+        <div className="flex md:hidden items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 text-ink-black hover:text-burnt-orange focus:outline-none"
+            className="p-2 text-ink-black hover:text-burnt-orange focus:outline-none rounded-lg hover:bg-black/5 transition-colors"
             aria-label="메뉴 열기"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -433,5 +472,6 @@ export default function GNB({
         )}
       </AnimatePresence>
     </header>
-  );
+  </>
+);
 }

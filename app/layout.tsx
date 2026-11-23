@@ -5,15 +5,42 @@ import HanjiBackground from "@/components/HanjiBackground";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 export const metadata: Metadata = {
-  title: "1446 세종런 | 2026 1446 SEJONG RUN 공식 마라톤",
+  metadataBase: new URL("https://www.1446sejongrun.com"),
+  title: "1446 세종런 2027",
   description:
-    "훈민정음 반포의 해, 골목의 불을 밝히는 14.46km / 10km / 5km 마라톤 대회. 달린 만큼 골목이 켜집니다.",
-  keywords: ["1446세종런", "세종마라톤", "1446마라톤", "훈민정음런", "세종골목상권"],
+    "달린 만큼 골목이 켜진다. 5,000명이 함께하는 행정수도 세종 골목 상생 마라톤!",
+  keywords: [
+    "1446세종런",
+    "세종마라톤",
+    "1446마라톤",
+    "훈민정음런",
+    "세종골목상권",
+    "이응다리마라톤",
+    "세종축제",
+  ],
   openGraph: {
-    title: "1446 세종런 (1446 SEJONG RUN)",
-    description: "달린 만큼 골목이 켜집니다. 훈민정음 반포 580돌 기념 세종 골목 상생 마라톤",
+    title: "1446 세종런 2027",
+    description:
+      "달린 만큼 골목이 켜진다. 5,000명이 함께하는 행정수도 세종 골목 상생 마라톤!",
+    url: "https://www.1446sejongrun.com",
+    siteName: "1446 세종런 2027",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "1446 세종런 2027 공식 마라톤 대표 이미지",
+      },
+    ],
     locale: "ko_KR",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "1446 세종런 2027",
+    description:
+      "달린 만큼 골목이 켜진다. 5,000명이 함께하는 행정수도 세종 골목 상생 마라톤!",
+    images: ["/og-image.jpg"],
   },
 };
 

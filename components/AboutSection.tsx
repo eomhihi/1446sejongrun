@@ -129,7 +129,7 @@ export default function AboutSection() {
             <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-hunmin font-bold text-ink-black leading-[1.3] sm:leading-[1.35] tracking-tight break-keep">
               완주선에서 끝나지 않고,
               <br />
-              <span className="text-burnt-orange underline decoration-wheat decoration-wavy decoration-2">
+              <span className="text-burnt-orange">
                 세종의 골목을 깨우는
               </span>
               <br />

@@ -29,6 +29,12 @@ const config: Config = {
           light: "#F7E8CE",
           dark: "#D6B887",
         },
+        "sejong-gold": {
+          DEFAULT: "#CDA357",
+          hover: "#B88E3E",
+          light: "#DFC082",
+          muted: "rgba(205, 163, 87, 0.15)",
+        },
       },
       fontFamily: {
         hunmin: ["var(--font-hunmin)", "serif"],

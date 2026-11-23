@@ -26,7 +26,7 @@ export default function Hero({ onOpenRegister, onOpenMedia }: HeroProps) {
       {/* 중앙 메인 콘텐츠 영역 */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col justify-center my-auto">
         {/* 상단 소제목: '행사 소개' & 국가균형성장의 중심 카피 */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-5 ml-16 sm:ml-0 break-keep">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-5 break-keep">
           <div className="w-5 sm:w-8 h-[2px] bg-burnt-orange flex-shrink-0" />
           <span className="text-sm sm:text-base md:text-lg font-hunmin font-bold tracking-widest text-burnt-orange uppercase">
             행사 소개
@@ -38,17 +38,17 @@ export default function Hero({ onOpenRegister, onOpenMedia }: HeroProps) {
 
         {/* 
           중앙 메인 타이틀 그리드:
-          좌측: public/images/logo-1446.svg 공식 로고 파일 (144 Ink Black + 6 Burnt Orange 원본 붓터치)
+          좌측: public/images/logo-1446.svg 공식 로고 파일 (모바일 max-w-[260px] ~ 데스크탑 max-w-[700px] 반응형)
           우측: 훈민정음체 핵심 슬로건 & 프리텐다드 서브 카피 대비 영역
         */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
-          {/* 공식 1446 SVG 로고 */}
+          {/* 공식 1446 SVG 로고: 모바일에서는 overflow 방지(max-w-[260px]), 데스크탑에서는 웅장하게(max-w-[700px]) */}
           <div className="lg:col-span-7 flex items-center justify-start">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-[330px] sm:max-w-[480px] lg:max-w-[620px] select-none mx-auto lg:mx-0"
+              className="w-full max-w-[260px] xs:max-w-[290px] sm:max-w-[420px] md:max-w-[500px] lg:max-w-[640px] xl:max-w-[700px] select-none mx-auto lg:mx-0"
             >
               <Image
                 src="/images/logo-1446.svg"
@@ -147,8 +147,8 @@ export default function Hero({ onOpenRegister, onOpenMedia }: HeroProps) {
 
       {/* 하단 다크 밴드 (#04151F Ink Black) & 경계선에 걸친 CTA 버튼 & 플로팅 카드 */}
       <div className="relative z-20 mt-12 sm:mt-16">
-        {/* 경계선 정중앙 캡슐형 CTA 버튼 */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
+        {/* 경계선 정중앙 캡슐형 CTA 버튼 (데스크탑 이상) */}
+        <div className="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
           <motion.button
             onClick={onOpenRegister}
             whileHover={{ y: -4, scale: 1.03 }}
@@ -173,49 +173,66 @@ export default function Hero({ onOpenRegister, onOpenMedia }: HeroProps) {
         </div>
 
         {/* 하단 20% 딥 잉크블랙 다크 밴드 */}
-        <div className="bg-ink-black text-white pt-10 sm:pt-14 pb-8 sm:pb-12 border-t border-wheat/10 font-pretendard">
+        <div className="bg-ink-black text-white pt-8 sm:pt-14 pb-8 sm:pb-12 border-t border-wheat/10 font-pretendard">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 items-center text-center md:text-left">
-              <div className="space-y-1">
-                <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold">
-                  일시
-                </span>
-                <p className="text-sm sm:text-base font-bold text-white">
-                  {formatEventDate(EVENT_DATE)}
-                </p>
+            {/* 데스크탑 뷰에서 우측 플로팅 비디오 카드를 위한 안전 지대 확보 (lg:pr-[470px] xl:pr-[490px]) */}
+            <div className="pr-0 lg:pr-[470px] xl:pr-[490px]">
+              {/* 정보 텍스트: 모바일(md 이하)에서는 세로 1열(flex-col gap-4)로 차곡차곡 정렬, 데스크탑에서는 가로 정렬 */}
+              <div className="flex flex-col gap-4 md:flex-row md:flex-wrap md:items-center md:justify-start md:gap-x-10 lg:gap-x-12 xl:gap-x-14 md:gap-y-4 text-left">
+                {/* 일시 */}
+                <div className="space-y-1 pb-3 md:pb-0 border-b border-white/10 md:border-b-0">
+                  <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold block">
+                    일시
+                  </span>
+                  <p className="text-sm sm:text-base font-bold text-white whitespace-nowrap">
+                    {formatEventDate(EVENT_DATE)}
+                  </p>
+                </div>
+
+                {/* 출발지 (장소) */}
+                <div className="space-y-1 pb-3 md:pb-0 border-b border-white/10 md:border-b-0">
+                  <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold block">
+                    출발지 (장소)
+                  </span>
+                  <p className="text-sm sm:text-base font-bold text-white whitespace-nowrap">
+                    {EVENT_LOCATION}
+                  </p>
+                </div>
+
+                {/* 모집 인원 */}
+                <div className="space-y-1 pb-3 md:pb-0 border-b border-white/10 md:border-b-0">
+                  <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold block">
+                    모집 인원
+                  </span>
+                  <p className="text-sm sm:text-base font-bold text-white whitespace-nowrap">
+                    전 코스 선착순 5,000명
+                  </p>
+                </div>
+
+                {/* 골목 상생 기금 */}
+                <div className="space-y-1 pb-3 md:pb-0 border-b border-white/10 md:border-b-0">
+                  <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold block">
+                    골목 상생 기금
+                  </span>
+                  <p className="text-sm sm:text-base font-bold text-burnt-orange font-mono whitespace-nowrap">
+                    1km당 100원 골목 적립
+                  </p>
+                </div>
+
+                {/* 참가 신청 버튼: 모바일(md: 이하)에서는 세로 1열 리스트 하단에 차곡차곡 배치 */}
+                <div className="md:hidden pt-2">
+                  <button
+                    onClick={onOpenRegister}
+                    className="w-full py-3.5 bg-burnt-orange hover:bg-burnt-orange-hover text-white rounded-xl font-pretendard font-bold text-sm flex items-center justify-center space-x-2 shadow-lg transition-all active:scale-[0.98]"
+                  >
+                    <span>참가신청 바로가기</span>
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </button>
+                </div>
               </div>
 
-              <div className="space-y-1">
-                <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold">
-                  출발지
-                </span>
-                <p className="text-sm sm:text-base font-bold text-white">
-                  {EVENT_LOCATION}
-                </p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold">
-                  모집 인원
-                </span>
-                <p className="text-sm sm:text-base font-bold text-white">
-                  전 코스 선착순 5,000명
-                </p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-[11px] text-wheat uppercase tracking-widest font-semibold">
-                  골목 상생 기금
-                </span>
-                <p className="text-sm sm:text-base font-bold text-burnt-orange font-mono">
-                  1km당 100원 골목 적립
-                </p>
-              </div>
-            </div>
-
-            {/* 공식 주최 및 주관 명시 바 */}
-            <div className="mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-wheat/80 font-pretendard">
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              {/* 공식 주최 및 주관 명시 바 */}
+              <div className="mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-start gap-x-4 gap-y-1 text-xs text-wheat/80 font-pretendard">
                 <span>
                   <strong className="text-white">주최:</strong> {EVENT_HOST}
                 </span>
@@ -223,9 +240,10 @@ export default function Hero({ onOpenRegister, onOpenMedia }: HeroProps) {
                 <span>
                   <strong className="text-white">주관:</strong> {EVENT_ORGANIZER}
                 </span>
-              </div>
-              <div className="text-[11px] text-white/50">
-                1446 세종 골목 상생 마라톤 공식 기획안 승인
+                <span className="text-white/30 hidden sm:inline">|</span>
+                <span className="text-[11px] text-white/50">
+                  1446 세종 골목 상생 마라톤 공식 기획안 승인
+                </span>
               </div>
             </div>
           </div>
