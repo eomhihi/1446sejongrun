@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/admin/media/[id]":{},"/api/admin/media":{},"/api/announcements":{},"/api/notices/[id]":{},"/api/sponsors":{},"/api/faqs":{},"/api/media":{},"/community/faq":{}}}
+{"version":1,"functions":{"/api/notices/[id]":{},"/api/announcements":{},"/api/admin/media":{},"/api/admin/media/[id]":{},"/api/faqs":{},"/api/media":{},"/api/sponsors":{},"/community/faq":{}}}

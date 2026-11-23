@@ -5,7 +5,7 @@ import HanjiBackground from "@/components/HanjiBackground";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.1446sejongrun.com"),
+  metadataBase: new URL("https://1446sejongrun.vercel.app"),
   title: "1446 세종런 2027",
   description:
     "달린 만큼 골목이 켜진다. 5,000명이 함께하는 행정수도 세종 골목 상생 마라톤!",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "1446 세종런 2027",
     description:
       "달린 만큼 골목이 켜진다. 5,000명이 함께하는 행정수도 세종 골목 상생 마라톤!",
-    url: "https://www.1446sejongrun.com",
+    url: "https://1446sejongrun.vercel.app",
     siteName: "1446 세종런 2027",
     images: [
       {
