@@ -1,0 +1,158 @@
+// Prisma 스키마 정의 (Vercel Postgres / Neon 전용)
+// 근거: Vercel Postgres Connection Pooling (POSTGRES_PRISMA_URL) 연동
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // Connection Pooler (PgBouncer, 포트 6543)
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Direct TCP Connection (포트 5432, migration 전용)
+}
+
+// 1. 코스별 정원 및 동시성 제어 모델 (Optimistic Lock & Atomic Counter)
+model CourseCapacity {
+  courseType   String   @id @map("course_type") @db.VarChar(20) // "14.46km", "10km", "5km"
+  courseName   String   @map("course_name") @db.VarChar(100)
+  maxLimit     Int      @map("max_limit")
+  currentCount Int      @default(0) @map("current_count")
+  fee          Int
+  version      Int      @default(0) // 낙관적 락(Optimistic Concurrency Control)용 버전 필드
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  participants Participant[]
+
+  @@map("course_capacities")
+}
+
+// 2. 참가자 모델 (개인정보 암호화 및 블라인드 인덱스)
+model Participant {
+  id            String   @id @default(cuid()) @db.VarChar(36)
+  bibNumber     String   @unique @map("bib_number") @db.VarChar(30) // 배번호 (예: 1446-0001)
+  receiptNumber String   @unique @map("receipt_number") @db.VarChar(10) // 고유 접수번호 (예: A7X9Q2)
+
+  name          String   @db.VarChar(50)
+  
+  // [보안 필드 - 오철칙 제5철칙 준수]
+  // phoneEncrypted: AES-256-GCM 암호문 (Base64)
+  // phoneHash: HMAC-SHA256 결정론적 해시 (Blind Index)
+  phoneEncrypted String  @map("phone_encrypted") @db.Text
+  phoneHash      String  @map("phone_hash") @db.VarChar(64)
+
+  courseType    String   @map("course_type") @db.VarChar(20)
+  shirtSize     String   @map("shirt_size") @db.VarChar(20)
+  status        String   @default("PAYMENT_PENDING") @db.VarChar(30)
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  course        CourseCapacity @relation(fields: [courseType], references: [courseType])
+  auditLogs     RegistrationAuditLog[]
+
+  @@index([phoneHash], name: "idx_participants_phone_hash")
+  @@index([receiptNumber], name: "idx_participants_receipt_number")
+  @@map("participants")
+}
+
+// 3. 접속 및 감사 로그 모델 (개인정보보호위원회 2년 보존 기준 준수)
+model RegistrationAuditLog {
+  id            String   @id @default(cuid()) @db.VarChar(36)
+  participantId String?  @map("participant_id") @db.VarChar(36)
+  actionType    String   @map("action_type") @db.VarChar(50) // "REGISTER", "LOOKUP", "FIND_ID"
+  ipAddress     String   @map("ip_address") @db.VarChar(50)
+  userAgent     String?  @map("user_agent") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  participant   Participant? @relation(fields: [participantId], references: [id], onDelete: SetNull)
+
+  @@index([actionType, createdAt])
+  @@map("registration_audit_logs")
+}
+
+// 4. 참여 상점 모델 (1446 애프터런 관리자 엑셀/CSV 업로드용)
+model PartnerShop {
+  id           Int      @id // CSV 상점 고유번호 (기본키)
+  shopName     String   @map("shop_name") @db.VarChar(100)
+  category     String   @db.VarChar(50) // 분류 - 식당 / 카페 / 기타
+  address      String   @db.VarChar(255) // 도로명 주소
+  discountInfo String   @map("discount_info") @db.Text // 1446 애프터런 혜택/할인 내용
+  capacity     Int      @default(0) // 수용 가능 인원 (크루 예약 배정에 필요)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("partner_shops")
+}
+
+// 5. 공지사항 모델 (관리자 전용 공지사항 등록/수정/삭제)
+model Notice {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  content     String   @db.Text // 본문 내용 (단순 줄바꿈 또는 마크다운)
+  isImportant Boolean  @default(false) @map("is_important") // 상단 고정 여부
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([isImportant, createdAt])
+  @@map("notices")
+}
+
+// 6. FAQ (자주 묻는 질문) 모델
+model Faq {
+  id        Int      @id @default(autoincrement())
+  category  String   @db.VarChar(50) // 접수 / 코스 / 결제 / 기타 등
+  question  String   @db.VarChar(255) // 질문
+  answer    String   @db.Text // 답변
+  sortOrder Int      @default(0) @map("sort_order") // 노출 순서
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([category, sortOrder])
+  @@map("faqs")
+}
+
+// 7. 긴급 팝업 및 상단 띠 배너(Top Banner) 제어 모델
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  type      String   @db.VarChar(20) // "POPUP" 또는 "BANNER"
+  content   String   @db.Text // 내용
+  linkUrl   String?  @map("link_url") @db.VarChar(500) // 클릭 시 이동 주소
+  isActive  Boolean  @default(true) @map("is_active") // 현재 노출 여부
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([type, isActive])
+  @@map("announcements")
+}
+
+// 8. 후원사(Sponsor) 로고 및 명단 관리 모델
+model Sponsor {
+  id           Int      @id @default(autoincrement())
+  sponsorName  String   @map("sponsor_name") @db.VarChar(100) // 기업명
+  tier         String   @db.VarChar(30) // 메인 / 골드 / 실버 / 브론즈 / 현물
+  logoImageUrl String   @map("logo_image_url") @db.VarChar(500) // 로고 이미지 경로
+  websiteUrl   String?  @map("website_url") @db.VarChar(500) // 공식 홈페이지 링크
+  sortOrder    Int      @default(0) @map("sort_order") // 노출 순서
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([tier, sortOrder])
+  @@map("sponsors")
+}
+
+// 9. 미디어(영상) 모델 (유튜브 영상 관리 및 메인 노출 제어)
+model MediaVideo {
+  id             Int      @id @default(autoincrement())
+  youtubeId      String   @map("youtube_id") @db.VarChar(50) // 유튜브 영상 고유 식별자
+  title          String   @db.VarChar(255) // 영상 제목
+  type           String   @db.VarChar(50) // 홍보영상 / 경기영상 / 코스 프리뷰 등
+  isMainExposure Boolean  @default(false) @map("is_main_exposure") // 메인 페이지 최하단 노출 여부
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([isMainExposure, createdAt])
+  @@map("media_videos")
+}
+
+

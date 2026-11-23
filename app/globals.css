@@ -1,0 +1,176 @@
+/* 1. 프리텐다드 웹폰트 CDN 로드 (가독성 높은 본문/UI 폰트) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+/* 2. public/fonts 훈민정음체 로컬 로드 (@font-face) */
+@font-face {
+  font-family: 'EBS Hunminjeongeum';
+  src: url('/fonts/EBS훈민정음L.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EBS Hunminjeongeum';
+  src: url('/fonts/EBS훈민정음R.ttf') format('truetype');
+  font-weight: 400;
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EBS Hunminjeongeum';
+  src: url('/fonts/EBS훈민정음SB.ttf') format('truetype');
+  font-weight: 600;
+  font-weight: 700;
+  font-weight: 800;
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --hanji-bg: #F7F5F0;
+  --ink-black: #04151F;
+  --burnt-orange: #C44900;
+  --slate-grey: #183A37;
+  --wheat: #EFD6AC;
+
+  /* 폰트 변수 세팅 */
+  --font-hunmin: 'EBS Hunminjeongeum', serif;
+  --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #F7F5F0;
+  color: #04151F;
+  font-family: var(--font-pretendard);
+  word-break: keep-all;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #F7F5F0;
+  color: #04151F;
+  font-family: var(--font-pretendard);
+}
+
+/* 훈민정음체 헤리티지 클래스 */
+.font-hunmin {
+  font-family: var(--font-hunmin) !important;
+}
+
+/* 프리텐다드 가독성 클래스 */
+.font-pretendard {
+  font-family: var(--font-pretendard) !important;
+}
+
+/* 네온 코스 글로우 이펙트 */
+.neon-glow-orange {
+  filter: drop-shadow(0 0 8px rgba(196, 73, 0, 0.8)) drop-shadow(0 0 16px rgba(196, 73, 0, 0.4));
+}
+
+/* 글래스모피즘 베이스 */
+.glass-dark {
+  background: rgba(4, 21, 31, 0.90);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(239, 214, 172, 0.20);
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F5F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #EFD6AC;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C44900;
+}
+
+/* 카카오맵(Kakao Maps API) 다크 테마 야간 모드 CSS 필터 트릭 */
+.kakao-dark-container {
+  filter: invert(90%) hue-rotate(180deg) brightness(75%) contrast(125%);
+  -webkit-filter: invert(90%) hue-rotate(180deg) brightness(75%) contrast(125%);
+}
+
+/* 카카오맵 내부 커스텀 오버레이 역필터 (글래스모피즘 다크 톤 및 텍스트 선명도 원복) */
+.kakao-custom-overlay {
+  filter: invert(100%) hue-rotate(180deg);
+  -webkit-filter: invert(100%) hue-rotate(180deg);
+}
+
+/* 지도 위 마커 및 말풍선 오버레이 */
+.custom-geo-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.geo-marker-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.geo-marker-pulse {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  animation: geoPulse 2.2s infinite ease-out;
+}
+
+@keyframes geoPulse {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.geo-speech-bubble {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(4, 21, 31, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(239, 214, 172, 0.35);
+  border-radius: 12px;
+  padding: 6px 12px;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  z-index: 1000;
+}
+
+.geo-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(4, 21, 31, 0.95);
+}

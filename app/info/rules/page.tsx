@@ -1,0 +1,461 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import {
+  FileText,
+  AlertTriangle,
+  CheckCircle2,
+  Calendar,
+  Clock,
+  ShieldCheck,
+  CreditCard,
+  UserCheck,
+  Gift,
+  HelpCircle,
+  ArrowRight,
+  ChevronRight,
+  Printer,
+  Download,
+  Award,
+} from "lucide-react";
+import GNB from "@/components/GNB";
+import RibbonShieldBadge from "@/components/RibbonShieldBadge";
+import Footer from "@/components/Footer";
+import RegistrationModal from "@/components/RegistrationModal";
+import MediaModal from "@/components/MediaModal";
+
+export default function RulesPage() {
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [registerDefaultTab, setRegisterDefaultTab] = useState<"register" | "lookup">("register");
+  const [isMediaOpen, setIsMediaOpen] = useState(false);
+
+  const handleOpenRegister = (tab?: "register" | "lookup") => {
+    setRegisterDefaultTab(tab || "register");
+    setIsRegisterOpen(true);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  return (
+    <div className="min-h-screen relative font-pretendard">
+      {/* 최상단 리본 배지 */}
+      <RibbonShieldBadge />
+
+      {/* 상단 GNB */}
+      <GNB
+        onOpenRegister={handleOpenRegister}
+        onOpenMedia={() => setIsMediaOpen(true)}
+      />
+
+      {/* 헤더 및 본문 컨테이너 */}
+      <main className="pt-28 sm:pt-36 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* 브레드크럼 */}
+        <nav aria-label="Breadcrumb" className="mb-6 flex items-center space-x-2 text-xs text-ink-black/60">
+          <Link href="/" className="hover:text-burnt-orange transition-colors">홈</Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span>참가신청/확인</span>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-burnt-orange font-bold">참가자 유의사항</span>
+        </nav>
+
+        {/* 상단 타이틀 영역 */}
+        <div className="bg-white/80 backdrop-blur-md rounded-3xl border border-ink-black/15 p-6 sm:p-10 shadow-xl mb-10 relative overflow-hidden">
+          {/* 우측 상단 배경 전각 워터마크 */}
+          <div className="absolute -right-6 -bottom-8 pointer-events-none opacity-5 font-hunmin text-8xl select-none">
+            規程
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-burnt-orange/10 border border-burnt-orange/30 text-burnt-orange text-xs font-bold font-hunmin">
+              <span className="seal-stamp text-burnt-orange border-burnt-orange scale-90">공식</span>
+              <span>2027 1446 세종런 마라톤 공식 규정집</span>
+            </div>
+
+            <button
+              onClick={handlePrint}
+              type="button"
+              className="inline-flex items-center space-x-1.5 text-xs font-bold text-ink-black/70 hover:text-burnt-orange px-3 py-1.5 rounded-xl border border-ink-black/15 hover:border-burnt-orange transition-colors bg-white/70 shadow-2xs"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>규정집 인쇄</span>
+            </button>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl font-hunmin font-bold text-ink-black leading-tight mb-3">
+            참가자 유의사항 및 대회 규정
+          </h1>
+          <p className="text-sm sm:text-base text-ink-black/75 leading-relaxed max-w-3xl">
+            2027 제1회 1446 세종 골목 상생 마라톤의 공정하고 안전한 운영을 위한 대회 공식 규정입니다.
+            신청 전 아래 명시된 조항들을 반드시 숙지하시기 바라며, 신청 완료 시 본 규정에 모두 동의한 것으로 간주됩니다.
+          </p>
+
+          {/* 핵심 요약 하이라이트 배너 */}
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-ink-black/10">
+            <div className="p-3.5 rounded-2xl bg-hanji-bg/80 border border-ink-black/10">
+              <div className="flex items-center space-x-1.5 text-burnt-orange text-xs font-bold mb-1">
+                <CreditCard className="w-4 h-4" />
+                <span>간편 신청 &amp; 비회원제</span>
+              </div>
+              <p className="text-xs text-ink-black/80 font-medium">
+                회원가입 없이 휴대폰 번호로 접수 및 고유 접수번호(6자리) 발급
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-hanji-bg/80 border border-ink-black/10">
+              <div className="flex items-center space-x-1.5 text-burnt-orange text-xs font-bold mb-1">
+                <Calendar className="w-4 h-4" />
+                <span>취소 및 정보 수정 마감</span>
+              </div>
+              <p className="text-xs text-ink-black/80 font-medium">
+                <strong className="text-burnt-orange">2027. 03. 22.(월) 17:00</strong> 이후 취소/환불/사이즈 변경 불가
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-hanji-bg/80 border border-ink-black/10">
+              <div className="flex items-center space-x-1.5 text-burnt-orange text-xs font-bold mb-1">
+                <Gift className="w-4 h-4" />
+                <span>한정 기념품 &amp; 바우처</span>
+              </div>
+              <p className="text-xs text-ink-black/80 font-medium">
+                5,000명 한정 28자 메달 및 세종 골목 상생 바우처 10,000원권
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 규정 본문 아티클 섹션 */}
+        <div className="space-y-8">
+          {/* ============================================================================== */}
+          {/* 01. 신청 방법 */}
+          {/* ============================================================================== */}
+          <section id="rules-apply" className="bg-white/90 rounded-3xl border border-ink-black/15 p-6 sm:p-9 shadow-md transition-shadow hover:shadow-lg">
+            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-ink-black/10">
+              <span className="w-9 h-9 rounded-2xl bg-burnt-orange text-white flex items-center justify-center font-mono font-bold text-sm shadow-xs">
+                01
+              </span>
+              <div>
+                <span className="text-[11px] font-bold text-burnt-orange tracking-widest uppercase">REGISTRATION POLICY</span>
+                <h2 className="text-xl sm:text-2xl font-hunmin font-bold text-ink-black">
+                  신청 방법 및 결제 규정
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-4 text-sm text-ink-black/85 leading-relaxed">
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제1조 (접수 방식 및 비회원 인증)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  1446 세종런 마라톤은 불필요한 개인정보 보관을 최소화하고 빠른 접수를 돕기 위해 <strong>별도의 회원가입 없이</strong> 참가자의 휴대폰 번호 본인 인증을 기반으로 신청이 진행됩니다. 참가 승인 즉시 알파벳과 숫자가 조합된 <strong>고유 접수번호(6자리)</strong>가 자동 발급됩니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제2조 (1인 1신청 원칙 및 타인 명의 도용 금지)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  공정한 선착순(5,000명) 모집 및 행사 당일 스마트 기록 칩 배부를 위해 <strong>1인 1신청</strong>을 엄격히 적용합니다. 타인의 개인정보를 도용하거나 매크로 등 부정한 방법으로 접수한 사실이 확인될 경우, 사전 통보 없이 신청이 취소되며 향후 세종런 참가 자격이 제한될 수 있습니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제3조 (결제 완료 후 정보 수정 불가 안내)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  참가비 결제(가상계좌 입금 또는 카드 결제)가 완료된 직후에는 티셔츠 등 한정 제작 기념품의 수량 발주가 실시간으로 집계되므로, <strong>기념 티셔츠 사이즈 및 참가 코스 유형은 임의 변경이 불가</strong>합니다. 결제 진행 전 선택하신 정보가 맞는지 다시 한번 확인하여 주시기 바랍니다.
+                </p>
+              </div>
+
+              {/* 환불 마감 경고 박스 */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-burnt-orange/5 border-2 border-burnt-orange/30 space-y-2">
+                <div className="flex items-center space-x-2 text-burnt-orange font-bold text-sm">
+                  <AlertTriangle className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제4조 (환불 마감일: 2027년 3월 22일 17:00 마감)</span>
+                </div>
+                <div className="text-xs sm:text-sm pl-6 text-ink-black/85 space-y-1">
+                  <p>
+                    참가 취소 및 결제액 100% 전액 환불 신청은 <strong>2027년 3월 22일(월) 17:00까지</strong> 웹사이트 내 [참가 확인 및 수정] 화면을 통해서만 접수 가능합니다.
+                  </p>
+                  <p className="text-burnt-orange font-semibold">
+                    ※ 2027년 3월 22일(월) 17:00 이후에는 보험 가입 완료, 개인화 스마트 번호표 인쇄 및 택배 포장 작업이 개시되므로 어떠한 사유로도 취소·환불 및 코스 변경이 절대 불가합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ============================================================================== */}
+          {/* 02. 참가자 확인 및 수정 */}
+          {/* ============================================================================== */}
+          <section id="rules-verify" className="bg-white/90 rounded-3xl border border-ink-black/15 p-6 sm:p-9 shadow-md transition-shadow hover:shadow-lg">
+            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-ink-black/10">
+              <span className="w-9 h-9 rounded-2xl bg-burnt-orange text-white flex items-center justify-center font-mono font-bold text-sm shadow-xs">
+                02
+              </span>
+              <div>
+                <span className="text-[11px] font-bold text-burnt-orange tracking-widest uppercase">LOOKUP &amp; MODIFICATION</span>
+                <h2 className="text-xl sm:text-2xl font-hunmin font-bold text-ink-black">
+                  참가자 확인 및 수정 규정
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-4 text-sm text-ink-black/85 leading-relaxed">
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제5조 (고유 접수번호 기반 비회원 조회 체계)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  참가 내역 확인은 <strong>[휴대폰 번호]</strong>와 참가 승인 시 교부된 <strong>[고유 접수번호 6자리(예: A7X9Q2)]</strong> 2단계 인증 조합으로만 열람 가능합니다. 본인 정보 보호를 위해 접수번호를 타인에게 공유하지 마십시오.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제6조 (접수번호 분실 시 재발송)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  접수번호를 분실하신 경우, [참가 확인 및 수정] 화면 하단의 <strong>[접수번호 찾기]</strong> 메뉴에서 등록하신 휴대폰 번호를 입력하시면 SMS/알림톡을 통해 등록된 접수번호를 즉시 재전송해 드립니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제7조 (정보 수정 가능 항목 및 기한)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  대회 패키지를 수령할 배송지 주소, 비상 연락처 등의 수정은 <strong>환불 마감일과 동일한 2027년 3월 22일(월) 17:00까지만</strong> 웹사이트를 통해 직접 수정하실 수 있습니다. 이후 변경 요청은 배송 오류를 방지하기 위해 일체 반영되지 않습니다.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ============================================================================== */}
+          {/* 03. 참가 자격 */}
+          {/* ============================================================================== */}
+          <section id="rules-eligibility" className="bg-white/90 rounded-3xl border border-ink-black/15 p-6 sm:p-9 shadow-md transition-shadow hover:shadow-lg">
+            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-ink-black/10">
+              <span className="w-9 h-9 rounded-2xl bg-burnt-orange text-white flex items-center justify-center font-mono font-bold text-sm shadow-xs">
+                03
+              </span>
+              <div>
+                <span className="text-[11px] font-bold text-burnt-orange tracking-widest uppercase">PARTICIPANT ELIGIBILITY</span>
+                <h2 className="text-xl sm:text-2xl font-hunmin font-bold text-ink-black">
+                  참가 자격 및 건강 동의
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-4 text-sm text-ink-black/85 leading-relaxed">
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제8조 (신체 건강한 남녀 참가 원칙)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  1446 세종런은 신체 건강한 만 18세 이상 성인 남녀 누구나 참가할 수 있습니다. 단, 심장질환, 뇌혈관질환, 호흡기 장애, 고혈압 등의 기저질환을 앓고 계신 분은 반드시 사전 전문의의 검진 및 상담을 거친 후 참가 여부를 결정하시기 바랍니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제9조 (만 18세 미만 미성년자 법정대리인 동의 필수)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  대회일 기준 <strong>만 18세 미만의 미성년자</strong>가 참가할 경우, 온라인 신청 시 <strong>법정대리인(부모 또는 보호자)의 동의 확인</strong>이 필수적입니다. 특히 5km 가족 걷기 코스의 만 12세 미만 어린이는 반드시 보호자가 동반 신청하여 함께 주행해야 합니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제10조 (참가자 건강 상태 및 면책 조항)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  모든 참가자는 경기 도중 본인의 체력 상태를 스스로 점검할 의무가 있으며, 이상 징후 발생 시 즉시 주로를 벗어나 안전요원에게 도움을 요청해야 합니다. 주최 측의 고의 또는 중과실이 없는 한, 참가자 본인의 부주의나 기저질환으로 인한 신체적 사고에 대해 주최 측은 대회 영업배상책임보험의 보장 범위 내에서만 행정적 지원을 제공합니다.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ============================================================================== */}
+          {/* 04. 기념품 및 상권 바우처 안내 */}
+          {/* ============================================================================== */}
+          <section id="rules-benefits" className="bg-white/90 rounded-3xl border border-ink-black/15 p-6 sm:p-9 shadow-md transition-shadow hover:shadow-lg">
+            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-ink-black/10">
+              <span className="w-9 h-9 rounded-2xl bg-burnt-orange text-white flex items-center justify-center font-mono font-bold text-sm shadow-xs">
+                04
+              </span>
+              <div>
+                <span className="text-[11px] font-bold text-burnt-orange tracking-widest uppercase">SOUVENIR &amp; VOUCHER</span>
+                <h2 className="text-xl sm:text-2xl font-hunmin font-bold text-ink-black">
+                  기념품 및 상권 바우처 규정
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-4 text-sm text-ink-black/85 leading-relaxed">
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제11조 (기념품 한정 수량 및 조기 품절 안내)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  대회 공식 기념품인 <strong>[훈민정음 28자 한정판 결합 메달]</strong>과 <strong>[1446 기능성 러닝 티셔츠]</strong>는 기획 한정 수량(총 5,000개)으로만 제작됩니다. 코스별 선착순 모집 마감 시 기념품 지급이 조기 마감될 수 있습니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제12조 (대회 물품 패키지 사전 택배 발송)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  대회 당일 현장 등록 부스의 혼잡을 최소화하기 위해, 번호표(RFID 칩 내장) 및 기념 티셔츠는 대회일 약 7~10일 전 참가자가 등록한 주소지로 일괄 택배 발송됩니다. 대회 당일에는 배송된 번호표를 반드시 가슴 전면에 착용하고 집결해야 합니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제13조 (1446 애프터런 골목 상생 바우처 10,000원권 운영 규정)</span>
+                </h3>
+                <div className="text-xs sm:text-sm pl-6 text-ink-black/80 space-y-1.5">
+                  <p>
+                    • <strong>지급 대상</strong>: 14.46km, 10km, 5km 완주자 전원에게 1인당 10,000원 상당의 상생 바우처 지급.
+                  </p>
+                  <p>
+                    • <strong>사용 가맹점</strong>: 세종시 전역 &apos;1446 함께하는 상점 300곳&apos;(식당, 카페, 문화공방 등)에서 현금과 동일하게 즉시 차감 결제 가능.
+                  </p>
+                  <p>
+                    • <strong>14,460원 러너 세트</strong>: 각 상점의 14,460원 기획 메뉴 주문 시 바우처 10,000원을 적용하여 실부담금 4,460원에 든든한 식사 및 보급을 즐기실 수 있습니다.
+                  </p>
+                  <p>
+                    • <strong>유효 기간</strong>: 대회 당일(2027.04.03)부터 7일간 유효하며, 타인에게의 불법 재판매 및 현금 환전은 엄격히 금지됩니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ============================================================================== */}
+          {/* 05. 코스 및 제한 시간 */}
+          {/* ============================================================================== */}
+          <section id="rules-course" className="bg-white/90 rounded-3xl border border-ink-black/15 p-6 sm:p-9 shadow-md transition-shadow hover:shadow-lg">
+            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-ink-black/10">
+              <span className="w-9 h-9 rounded-2xl bg-burnt-orange text-white flex items-center justify-center font-mono font-bold text-sm shadow-xs">
+                05
+              </span>
+              <div>
+                <span className="text-[11px] font-bold text-burnt-orange tracking-widest uppercase">COURSE &amp; TIME LIMIT</span>
+                <h2 className="text-xl sm:text-2xl font-hunmin font-bold text-ink-black">
+                  코스 제한시간 및 기록 계측 규정
+                </h2>
+              </div>
+            </div>
+
+            <div className="space-y-4 text-sm text-ink-black/85 leading-relaxed">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-4 rounded-2xl bg-hanji-bg/80 border border-ink-black/10 text-center">
+                  <span className="text-xs font-bold text-burnt-orange">14.46km 상징 코스</span>
+                  <div className="text-2xl font-bold font-mono text-ink-black mt-1">2시간 15분</div>
+                  <span className="text-[11px] text-ink-black/60 mt-1 block">이응다리 2회 순환 + 호수공원</span>
+                </div>
+                <div className="p-4 rounded-2xl bg-hanji-bg/80 border border-ink-black/10 text-center">
+                  <span className="text-xs font-bold text-burnt-orange">10km 도심 도전 코스</span>
+                  <div className="text-2xl font-bold font-mono text-ink-black mt-1">1시간 30분</div>
+                  <span className="text-[11px] text-ink-black/60 mt-1 block">이응다리 + 도시숲길 코스</span>
+                </div>
+                <div className="p-4 rounded-2xl bg-hanji-bg/80 border border-ink-black/10 text-center">
+                  <span className="text-xs font-bold text-burnt-orange">5km 가족 걷기 코스</span>
+                  <div className="text-2xl font-bold font-mono text-ink-black mt-1">1시간 20분</div>
+                  <span className="text-[11px] text-ink-black/60 mt-1 block">이응다리 보행교 원형 코스</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제14조 (제한 시간 초과 시 조치)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  교통 통제 해제 및 참가자의 안전 확보를 위해 코스별 제한 시간을 엄격히 적용합니다. 제한 시간 초과 시 주로 진행 요원의 지시에 따라 회송 차량에 탑승해야 하며, 지시에 불응하고 주로를 계속 달릴 경우 발생하는 안전사고에 대해서는 주최 측이 책임지지 않습니다.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-hanji-bg/60 border border-ink-black/10 space-y-2">
+                <h3 className="font-bold text-ink-black flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-burnt-orange flex-shrink-0" />
+                  <span>제15조 (기록 계측 방식)</span>
+                </h3>
+                <p className="text-xs sm:text-sm pl-6 text-ink-black/80">
+                  14.46km 및 10km 코스는 번호표 후면에 부착된 RFID 스마트 칩을 통해 출발 매트를 통과하는 시점부터 측정되는 <strong>넷타임(Net-Time) 방식</strong>으로 계측됩니다. 칩을 떼어내거나 훼손할 경우 기록이 인정되지 않습니다. (5km 코스는 비경쟁 걷기 행사로 기록을 계측하지 않습니다.)
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* 하단 퀵 액션 카드 */}
+        <div className="mt-12 p-8 rounded-3xl bg-burnt-orange text-white shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+          <div className="relative z-10 space-y-2 text-center md:text-left">
+            <span className="text-xs font-bold tracking-wider text-wheat/90 uppercase">
+              2027 1446 SEJONG RUN
+            </span>
+            <h3 className="text-xl sm:text-2xl font-hunmin font-bold">
+              규정을 모두 확인하셨나요? 지금 세종의 골목을 함께 밝혀보세요!
+            </h3>
+            <p className="text-xs sm:text-sm text-wheat/80 max-w-xl">
+              선착순 5,000명 한정 접수! 고유 접수번호 발급과 함께 즉시 참가 승인됩니다.
+            </p>
+          </div>
+
+          <div className="relative z-10 flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => handleOpenRegister("register")}
+              className="px-6 py-3.5 bg-wheat hover:bg-wheat/90 text-ink-black text-sm font-bold rounded-2xl shadow-lg transition-all flex items-center space-x-2 hover:scale-105"
+            >
+              <span>참가 신청하기</span>
+              <ArrowRight className="w-4 h-4 text-burnt-orange" />
+            </button>
+            <button
+              onClick={() => handleOpenRegister("lookup")}
+              className="px-5 py-3.5 bg-black/20 hover:bg-black/30 text-white text-sm font-bold rounded-2xl border border-white/20 transition-all"
+            >
+              <span>참가 확인/수정</span>
+            </button>
+          </div>
+        </div>
+      </main>
+
+      {/* 푸터 */}
+      <Footer />
+
+      {/* 참가신청/조회 모달 */}
+      <RegistrationModal
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+        defaultTab={registerDefaultTab}
+      />
+
+      {/* 미디어 모달 */}
+      <MediaModal
+        isOpen={isMediaOpen}
+        onClose={() => setIsMediaOpen(false)}
+      />
+    </div>
+  );
+}
